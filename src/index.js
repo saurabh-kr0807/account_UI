@@ -13,11 +13,10 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 // const app = express();
 // app.use(cors());
 // const port = 3000;
-
+//main file
 root.render(
   <React.StrictMode>
      <App />
-   
   </React.StrictMode>
 );
 
