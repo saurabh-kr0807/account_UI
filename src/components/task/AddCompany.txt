@@ -1,0 +1,181 @@
+import React from 'react'
+import { useState } from 'react';
+// import { finished } from 'stream';
+import axios from 'axios';
+
+const baseURL = "https://account-management-system-hero.herokuapp.com/welcome";
+const AddCompany = () => {
+    const [companyData, setComapanyData] = useState(null);
+
+    React.useEffect(() => {
+    axios.get(baseURL).then((response) => {
+        let name = response;
+        console.log(response);
+    });
+    }, []);
+
+    // const addCompany = (e) => {
+    //     setComapanyData({
+    //         ...companyData,
+    //         [e.target.name]: e.target.value,
+    //     })   
+    // }
+
+    // console.log(companyData); //for debugging
+
+    // const saveCompany = (companyData) => {
+    //     let jsonCompanyData = JSON.stringify(companyData);
+    //     console.log(jsonCompanyData); //for debugging purpose
+        
+    // }
+
+    const [enterpriseData, setEnterpriseData] = useState({
+        enterpriseName:"",
+        enterpriseAddress:"",
+    })
+
+    const addEnterprise = (e) =>{
+        setEnterpriseData({
+            ...enterpriseData,
+            [e.target.name] : e.target.value,
+        })
+    }
+    // console.log("enterprise Data"+ enterpriseData);//for debugging purpose
+
+    const saveEnterprise = () => {
+
+    }
+
+    const [enterpriseLocationData, setEnterpriseLocationData] = useState({
+        enterpriseLocationName : "",
+        enterpriseLocationAddress : "",
+    })
+
+    const addEnterpriseLocation = (e) => {
+        setEnterpriseLocationData({
+            ...enterpriseLocationData,
+            [e.target.name] : e.target.value,
+        })
+    }
+    // console.log("enterprise Location Data = "+ enterpriseLocationData); //for debugging purpose
+
+    const saveEnterpriseLocation = () => {
+
+    }
+    return (
+        <>
+            <div className="container mt-3">
+                <div className="mb-3">
+                    <h2 className="text-center">Register Company and Enterprises</h2>
+                </div>
+                <form >
+                    <div className="form-group mb-3">
+                        <label className="form-label" htmlFor="companyName"> Company Name : </label>
+                        <input  type="text" 
+                                name="companyName" 
+                                placeholder="Enter here"
+                                value={companyData.companyName}
+                                onChange={addCompany}
+                                />
+                    </div>
+                    <label>
+                        Company Address :
+                        <input  type="text" 
+                                name="companyAddress" 
+                                placeholder="Enter Here" 
+                                value={companyData.companyAddress}
+                                onChange={addCompany}
+                                />
+                    </label>
+                    {/* company name = {companyData.companyName} //for debugging  */}
+                    {/* Expandable button for add enterpries*/}
+                    <p className="mt-3">
+                        <a className="btn btn-primary" data-bs-toggle="collapse" href="#addEnterpreise" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Add new Enterpreise
+                        </a>
+                    </p>
+                    <div className="collapse" id="addEnterpreise">
+                        <div className="card card-body">
+                            <form>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="enterpriseName"> Enterprise Name : </label>
+                                    <input  type="text" 
+                                            className="enterpriseName"  
+                                            placeholder="Enter Here"
+                                            value={enterpriseData.enterpriseName}
+                                            onChange={addEnterprise}
+                                            />
+                                </div>
+                                <div className="form-group mb-3">
+                                    <label htmlFor="enterpriseAddress">Enterprise Address :</label>
+                                    <input 
+                                        type="text" 
+                                        className="enterpriseAddress" 
+                                        placeholder="Enter Here"
+                                        value={enterpriseData.enterpriseAddress}
+                                        onChange = {addEnterprise} 
+                                    />
+                                </div>
+
+                                <p>
+                                    <a className="btn btn-primary" data-bs-toggle="collapse" href="#addLocation" role="button" aria-controls="collapseExample">
+                                        Add Enterprises Location
+                                    </a>
+                                </p>
+                                {/* <div className="collapse" id="addEnterpriseLocation"> */}
+                                    <div className="card card-body">
+                                        <form>
+                                            <div className="form-group mb-3">
+                                                <label htmlFor="locationName"> Location Name : </label>
+                                                <input  type="text" 
+                                                        name="enterpriseLocationName" 
+                                                        id="locationName" 
+                                                        placeholder="Enter Here" 
+                                                        value={enterpriseLocationData.enterpriseLocationName}
+                                                        onChange={addEnterpriseLocation}
+                                                    />
+                                            </div>
+                                            <div className="form-group mb-3">
+                                                <label htmlFor="locationAddress"> Location Address : </label>
+                                                <input  type="text" 
+                                                        name="locationAddress" 
+                                                        id="locationAddress" 
+                                                        placeholder="Enter Here"
+                                                        value = {enterpriseLocationData.enterpriseLocationAddress}
+                                                        onChange={addEnterpriseLocation}
+                                                />
+                                            </div>
+                                            <button className="btn btn-primary mt-3" 
+                                                    type="submit" 
+                                                    onClick={saveEnterpriseLocation}
+                                                >
+                                                    Save
+                                            </button>
+                                        </form>
+                                    </div>
+                                {/* </div> */}
+                                <button className="btn btn-primary mt-3" 
+                                        type="submit"
+                                        onClick={saveEnterprise}
+                                    >
+                                        Save
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <button className="btn btn-primary mt-3" 
+                            type="submit"
+                            id="saveCompBtn"
+                            onClick={saveCompany(companyData)}
+                        >
+                            Save
+                    </button>
+                </form>
+
+
+            </div>
+        </>
+    )
+}
+
+export default AddCompany

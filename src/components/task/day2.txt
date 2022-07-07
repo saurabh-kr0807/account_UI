@@ -1,0 +1,15 @@
+task for rakesh :-
+1. create organization register page (from home page --> regiter click --> (org_id --> dash board))
+2. dash board page manage :- part A --> (dash board --> (org_id) --> enterprise_list and is_active flag)
+							part B --> (enterprise_details --> entprise_id --> location_details)
+							part C --> (location_details --> location_id --> expence_center_details)
+		
+
+		Request Body - {  
+							"enterpriseName": "Rishav bjsxcmxbc",  
+							"enterpriseAddress": "ckbxjcbnsb",
+							"locationName": "jksdfks 5th cross",
+							"locationAddress": "5thCross",
+							"organizationId": 16
+						}
+}
