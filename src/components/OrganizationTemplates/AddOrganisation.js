@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const baseURL = "https://account-management-system-hero.herokuapp.com/add-organization"
 const AddOrganisation = (props) => {
-    
+  
     const navigate = useNavigate();
     const [organizationData, setOrganizationData] = useState({
         organization_name: "",
@@ -16,9 +16,9 @@ const AddOrganisation = (props) => {
     // let orgid = null; fixed stmt
     //let orgid = 220; //for debugging purpose
     let orgid=12;
-    //to prevent renders on every letter input by user
-    const name_ref=useRef(null)
-    const addr_ref=useRef(null)
+ //to prevent renders on every letter input by user
+ const name_ref=useRef(null)
+ const addr_ref=useRef(null)
     const notify = () => {toast.success("Organization added successfully!", {
         position: "top-right",
         autoClose: 2000,
@@ -32,7 +32,7 @@ const AddOrganisation = (props) => {
         ...organizationData, 
         organization_name : name_ref.current.value,
         organization_address: addr_ref.current.value                           
-    })  
+      })  
 }
 const registerOrg = async (e) =>{
     e.preventDefault();
@@ -111,5 +111,4 @@ console.log(orgid);
 }
 
 export default AddOrganisation
-
 

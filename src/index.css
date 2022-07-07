@@ -11,3 +11,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/*for temporary use,later will do this with media queries*/
+#shrinkHeader{
+  max-width:80%
+}

@@ -54,11 +54,14 @@ const ShowEnterprises = ({ orgData }) => {
           console.log(error.config);
     })
     navigate("/add-location-dashboard", {state : {payload : entPayload, entName : orgData.enterprises[entState].enterpriseName,entAddress:orgData.enterprises[entState].enterpriseAddress}});
-
+    window.location.reload(true)
  }
  console.log("rendering")
  const passKey=(k)=>{
-    setEntState(k);
+     console.log(k)
+    setEntState(k)
+    navigate("/add-location-dashboard",{state:{id: k}})
+  
  }
     return (
         <>
@@ -68,7 +71,7 @@ const ShowEnterprises = ({ orgData }) => {
                 hover
                 responsive
             >
-                <thead>
+            <thead>
                     <tr>
                         <th>
                             Enterprise Code
@@ -83,7 +86,7 @@ const ShowEnterprises = ({ orgData }) => {
                             Action
                         </th>
                     </tr>
-                </thead>
+            </thead>
                 <tbody>
                   
                         {
@@ -93,7 +96,7 @@ const ShowEnterprises = ({ orgData }) => {
                                     <td>{orgData.enterprises[key].enterpriseName}</td>
                                     <td>{orgData.enterprises[key].enterpriseAddress}</td>
                                     <td>  <p className="mt-3">
-                <a className="btn btn-primary" onClick={()=>{passKey(key)}} data-bs-toggle="collapse" href="#addLocation" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <a className="btn btn-primary" onClick={()=>{passKey(orgData.enterprises[key].enterpriseId)}} data-bs-toggle="collapse" href="#addLocation" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Add Location
                 </a>
             </p></td>

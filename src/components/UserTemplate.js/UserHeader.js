@@ -3,7 +3,7 @@ import React from 'react'
 const UserHeader = ({organizationName,organizationAddress}) => {
     return (
         <>
-            <div className="col-md-12 d-none d-md-block position-fixed">
+            <div className="col-md-12 d-none d-md-block position-fixed" id="shrinkHeader">
                 <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                     <div className="container-fluid">
                         <div>

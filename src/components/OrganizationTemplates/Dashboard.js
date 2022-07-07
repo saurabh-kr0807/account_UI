@@ -2,23 +2,22 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Table } from 'reactstrap'
+import Sidebar from '../templates/Sidebar'
 import UserHeader from '../UserTemplate.js/UserHeader'
 
 
 import ShowEnterprises from './ShowEnterprises'
-
-const Dashboard = ({meta}) => {
+import Layout from '../templates/Layout'
+const Dashboard = () => {
 
 
     const location = useLocation();
 
     const [orgData, setOrgData] = useState([]);
-    const [orgId, setOrgId] = useState(meta);  
+    const [orgId, setOrgId] = useState(location.state.id);  
     const [flag,setFlag]=useState(false)
-    // if(location.state === null) {
-    //     setOrgId(meta);
-    // }
     const fetchOrg = async () => {
+       // if(location.state.id!=12){
         try {
             const response = await axios.get(`https://account-management-system-hero.herokuapp.com/get-organization/${orgId}`);
             if (response) {
@@ -26,7 +25,8 @@ const Dashboard = ({meta}) => {
               //  console.log(Object.values(response.data));
                 if (response.data) {
                     setOrgData(response.data);
-                    setFlag(true)
+                  setFlag(true)//this is required because when the dashboard page
+                  //reloads we again need fetchOrg to run,so given flag dependency in useEffect
                     console.log(response.data);
                 } else {
                     console.log('No Schedule Job Locations returned');
@@ -35,30 +35,25 @@ const Dashboard = ({meta}) => {
         } catch (err) {
             console.log(err);
         }
+        
+    //setOrgId(location.state.id)
     };
     useEffect(()=>{
-        const x=location.state;
-        setOrgId(x.id) 
-        console.log(x);
         fetchOrg();
     },[orgId,flag])
+ 
 
     return (
         <>
-            <UserHeader organizationName={orgData.organizationName} organizationAddress={orgData.organizationAddress} />
-            <Table borderless hover responsive size="sm" className='mt-5'>
-                <thead>
-                    <tr>
-                        <th className="col-md-2" >
-                            
-                        </th>
-                    </tr>
-                    {flag? <th className="col-md-10 mt-3">
-                            <ShowEnterprises orgData={orgData} />
-                        </th>:''}
-                </thead>
-            </Table>
-        </>
+  
+        <Layout>
+        <div>
+        <UserHeader organizationName={orgData.organizationName} organizationAddress={orgData.organizationAddress}/>
+          {flag? <ShowEnterprises orgData={orgData}/>:''}
+        </div>
+        </Layout>
+      </>
+        
     )
 }
 

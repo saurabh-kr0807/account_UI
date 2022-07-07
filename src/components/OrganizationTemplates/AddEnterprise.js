@@ -62,7 +62,7 @@ const AddEnterprise = ({organizationData}) => {
     return (
         <>
             <p className="mt-3">
-                <a className="btn btn-primary" data-bs-toggle="collapse" href="#addEnterpreise" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <a style={{marginTop:100}} className="btn btn-primary" data-bs-toggle="collapse" href="#addEnterpreise" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Add new Enterprise
                 </a>
             </p>

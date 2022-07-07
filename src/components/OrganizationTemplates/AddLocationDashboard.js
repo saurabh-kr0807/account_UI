@@ -1,107 +1,188 @@
-import React from 'react';
+
+import { useState,useEffect } from 'react';
+import { useLocation, Navigate } from 'react-router-dom'
 import EnterpriseHeader from '../Headers/EnterpriseHeader'
-import { Table } from 'reactstrap'
 import axios from 'axios'
-import { useState, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-
-function AddLocationDashboard(props) {
+import { Table } from 'reactstrap'
+import MoreLocations from './MoreLocations'
+import { useNavigate } from 'react-router-dom';
+import Layout from '../templates/Layout'
+const AddLocationDashboard=(props)=> {
     const location = useLocation();
-    const [entData, setEntData] = useState({})
-    //  const [entId, setEntId] = useState(null); 
-    const [entState, setEntState] = useState({
-        enterpriseName: "",
-        enterpriseAddress: ""
-    });
-    useEffect(() => {
-        const x = location.state;
-        setEntData(x.payload);
-        setEntState({
-            enterpriseName: location.state.entName,
-            enterpriseAddress: location.state.entAddress
-        })
-        console.log(entState)
-        console.log(x);
-        // console.log('i fire once');
-        fetchEnt()
-    }, [entData])
-
-    // const passKey=(k)=>{
-    //     setEntState(k);
-    //  }
-    const fetchEnt = async () => {
-        try {
-            const response = await axios.get(`https://account-management-system-hero.herokuapp.com/get-location/${entData.enterpriseId}`,
-                {
-                    "Access-Control-Allow-Origin": "*"
-                });
-            if (response) {
-                console.log(Object.keys(response.data));
-                console.log(Object.values(response.data));
-                if (response.data) {
-                    console.log(response.data);
-                } else {
-                    console.log('No Schedule Job Locations returned');
+    const navigate = useNavigate();
+    let [entId,setEntId]=useState(location.state.id)
+    const [entData,setEntData]=useState([])
+    const [flag,setFlag]=useState(false);
+    const [locationSaveFlag,setLocationSaveFlag]=useState(false);
+    const [resLoc,setResLoc]=useState([])
+    const [locationData,setLocationData]=useState([]);
+    const fetchEntData= async () => {
+        
+            try {
+                const response = await axios.get(`https://account-management-system-hero.herokuapp.com/get-enterprise/${entId}`);
+                if (response) {
+                   console.log(Object.keys(response.data));
+                   console.log(Object.values(response.data));
+                    if (response.data) {
+                        setEntData(response.data);
+                        setFlag(true)
+                        console.log(response.data);
+                       // console.log(entData)
+                      // console.log(entData.locations[0].locationCode)
+                    } else {
+                        console.log('No Schedule Job Locations returned');
+                    }
                 }
+            } catch (err) {
+                console.log(err);
             }
-        } catch (error) {
-            if (error.response) {
-
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                console.log(error.request);
-            } else {
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
-        }
-    };
-    return (
-        <>
-            <EnterpriseHeader entState={entState} />
-            <a style={{ marginTop: 100 }} className="btn btn-primary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
-                Add Location
-            </a>
-            <Table borderless hover responsive size="sm" className='mt-5'>
-                <thead>
-                    <tr>
-                        <th className="col-md-2" >
-                            Location Code
-
-                        </th>
-                        <th className="col-md-2" >
-                            Location Name
-
-                        </th>
-                        <th>  Location Address</th>
-                        <th>  Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-
-                        <td style={{ width: '200px' }}>{entData.locationCode}</td>
-                        <td style={{ width: '200px' }}>{entData.locationName}</td>
-                        <td style={{ width: '200px' }}>{entData.locationAddress}</td>
-                        <td>  <p className="mt-3">
-                            <a className="btn btn-primary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="collapseExample">
-                                Add Expenses
-                            </a>
-                        </p></td>
-
-
-
-                    </tr>
-
-                </tbody>
-            </Table>
-
-
-        </>
-    );
+        
+}
+const saveLocationsList=async ()=>{
+  await  axios.post(`https://account-management-system-hero.herokuapp.com/add-location/${entId}`,
+  {locationData:locationData},
+  {
+    "Access-Control-Allow-Origin":"*"
+})
+  .then((res)=>{
+      alert("locations saved successfully");
+      setLocationSaveFlag(true);
+      setResLoc(res.data);
+      console.log(res.data)
+    })
+  .catch(error =>{
+    if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.log('Error', error.message);
+      }
+      console.log(error.config);
+})
 }
 
-export default AddLocationDashboard;
+const handleLocData=(data)=>{
+   setLocationData(arr => [...arr,data])
+}
+    useEffect(()=>{
+        const x=location.state;
+        setEntId(x.id) 
+        console.log(x);
+        fetchEntData();
+    },[entId,flag])
+const redirectWithLocId=(ids)=>{
+        navigate("/add-centers",{state:{id:ids}})
+}
+    return (
+        <>
+        <Layout>
+            <EnterpriseHeader enterpriseName={entData.enterpriseName} enterpriseAddress={entData.enterpriseAddress}/>
+          <MoreLocations  handleLocData={handleLocData}/>
+            
+         <Table>
+        <tr>
+                {/* <th>
+                    Location Code
+                </th> */}
+                <th>
+                    Location Name
+                </th>
+                <th>
+                    Location Address
+                </th>
+                <th>
+                    Edit 
+                </th>
+                <th>
+                    Delete 
+                </th>
+                </tr>
+             {flag ?  <tr>
+                    {/* <td>{entData.locations[0].locationCode}</td> */}
+                    <td>{entData.locations[0].locationName}</td>
+                    <td>{entData.locations[0].locationAddress}</td>
+                    <td><p className="mt-3">
+                <a className="btn btn-primary">
+                Edit
+                </a></p></td>
+                <td><p className="mt-3">
+                <a className="btn btn-primary">
+                Delete
+                </a></p></td>
+                </tr>
+                :''}
+               {locationData && locationData.map((item)=>(
+                   <>
+                   <tr>
+                    {/* <td></td> */}
+                    <td>{item.locationName}</td>
+                    <td>{item.locationAddress}</td>
+                    <td><p className="mt-3">
+                <a className="btn btn-primary">
+                    Edit
+                </a></p></td>
+                <td><p className="mt-3">
+                <a className="btn btn-primary">
+                    Delete
+                </a></p></td>
+                </tr>
+                   </>
+               ))
+               }
+                 
+                     <button className="btn btn-primary mt-3" onClick={saveLocationsList}>Final Save</button>
+            </Table>
+            {locationSaveFlag ?
+            <Table>
+                  <tr>
+                <th>
+                    Location Code
+                </th>
+                <th>
+                    Location Name
+                </th>
+                <th>
+                    Location Address
+                </th>
+                <th>
+                    Add Expenses 
+                </th>
+               
+                </tr>
+                <tr>
+                    <td>{entData.locations[0].locationCode}</td>
+                    <td>{entData.locations[0].locationName}</td>
+                    <td>{entData.locations[0].locationAddress}</td>
+                    <td><p className="mt-3">
+                <a className="btn btn-primary">
+                Add Expenses
+                </a></p></td>
+               
+                </tr>
+                {resLoc && resLoc.map((item)=>(
+                    <>
+                     <tr>
+                    <td>{item.locationCode}</td>
+                    <td>{item.locationName}</td>
+                    <td>{item.locationAddress}</td>
+                    <td><p className="mt-3">
+                <a className="btn btn-primary" onClick={()=>{redirectWithLocId(item.locationId)}}>
+                    Add Expenses
+                </a></p></td>
+               
+                </tr>
+
+                    </>
+                ))}
+            </Table>:
+            ''}
+            </Layout>
+        </>
+    );
+
+}
+export default AddLocationDashboard
