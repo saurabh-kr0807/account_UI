@@ -1,3 +1,4 @@
+import { wait } from '@testing-library/user-event/dist/utils'
 import axios from 'axios'
 import React, { useState } from 'react'
 
@@ -10,15 +11,14 @@ const AddCustomer = (props) => {
         customerAddress: "",
         pincode: "",
     })
+    //for pincode fetching 
     const [pinData, setPinData] = useState([]);
     const [flag, setFlag] = useState(false);
-    const [pinCode, setPinCode] = useState({
-        pincode: "",
-    });
+    const [pinCode, setPinCode] = useState(800001);
 
-    const fetchPinCode = async () => {
+    const fetchPinCode = async (pcode) => {
         try {
-            const response = await axios.get(`${baseURL}/get-city-detail/${pinCode.pincode}`);
+            const response = await axios.get(`${baseURL}/get-city-detail/${pcode}`);
             if (response) {
                 if (response.data) {
                     setPinData(response.data);
@@ -33,6 +33,17 @@ const AddCustomer = (props) => {
         }
     }
 
+    //for ifsc fetching 
+    const [ifscData, setIfscData] = useState();
+    // const fetchIfsc = async (ifsc) => {
+    //     try {
+    //         const response = await axios.get(`${baseURL}/get-bank-detail/${ifsc}`);
+    //         if(response) {
+    //             set
+    //         }
+    //     }
+    // }
+
     const registerCust = () => {
 
     }
@@ -40,15 +51,18 @@ const AddCustomer = (props) => {
     const AddCust = () => {
 
     }
-    const onChangePin = () => {
-        setPinCode(...pinCode);
+    const onChangePin = (e) => {
+
+        setPinCode(e.target.value);
         console.log(pinCode);
+
+        fetchPinCode(pinCode)
     }
 
     return (
         <>
-            <p className="mt-3">
-                <a className="btn btn-primary position-relative" data-bs-toggle="collapse" href="#stage1" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <p className="mt-3 position-relative ">
+                <a className="btn btn-primary " data-bs-toggle="collapse" href="#stage1" role="button" aria-expanded="false" aria-controls="collapseExample">
                     Add new Customer
                 </a>
             </p>
@@ -72,7 +86,7 @@ const AddCustomer = (props) => {
                                 <tr className="mt-3">
                                     <td><label htmlFor="pincode">Pin Code</label></td>
                                     <td>
-                                        <input type="text" name="pincode" placeholder="Enter Here" onChange={onChangePin} />
+                                        <input type="text" name="pincode" placeholder="Enter Here" onChange={onChangePin}/>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,12 +96,15 @@ const AddCustomer = (props) => {
                                     </td>
                                     <td><label htmlFor="districtName">District Name</label></td>
                                     <td>
-                                        <input type="text" name="districtName" value={pinData.districtName} readOnly />                                    </td>
+                                        <input type="text" name="districtName" value={pinData.districtName} readOnly />                                   
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td><label htmlFor="stateName">State Name</label></td>
                                     <td>
                                         <input type="text" name="stateName" value={pinData.stateName} readOnly />
                                     </td>
-                                    <td><label htmlFor="countryName">City Name</label></td>
+                                    <td><label htmlFor="countryName">Country Name</label></td>
                                     <td>
                                         <input type="text" name="countryName" value={pinData.countryName} readOnly />
                                     </td>
@@ -104,10 +121,20 @@ const AddCustomer = (props) => {
                                 <table>
                                     <tbody>
                                         <tr>
+                                            <td><label htmlFor="vatno">VAT Number</label></td>
+                                            <td>
+                                                <input type="text" name="vatno" placeholder="Enter here" onChange={AddCust} />
+                                            </td>
+                                            <td><label htmlFor="tanno">TAN Number</label></td>
+                                            <td>
+                                                <input type="text" name="tanno" placeholder="Enter here" onChange={AddCust} />
+                                            </td>
                                             <td><label htmlFor="gstno">GST Number</label></td>
                                             <td>
                                                 <input type="text" name="gstno" placeholder="Enter here" onChange={AddCust} />
                                             </td>
+                                        </tr>
+                                        <tr>
                                             <td><label htmlFor="panNo">Bussiness PAN Number</label></td>
                                             <td>
                                                 <input type="text" name="panNo" placeholder="Enter here" onChange={AddCust} />
@@ -121,15 +148,17 @@ const AddCustomer = (props) => {
                                 </table>
                             </div>
                         </div>
-                        <p className="btn btn-primary position-relative mt-3" data-bs-toggle="collapse" href="#stage3" role="button" aria-expanded="false">
-                            Add Account Details
-                        </p>
+                        <div className="position-relative">
+                            <p className="btn btn-primary mt-3" data-bs-toggle="collapse" href="#stage3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                Add Account Details
+                            </p>
+                        </div>
                         <div className="collapse" id="stage3">
                             <div className="card card-body">
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td><label htmlFor="accountName">Account Name</label></td>
+                                            <td><label htmlFor="accountName">Account Holder Name</label></td>
                                             <td>
                                                 <input type="text" name="accountName" placeholder="Enter here" onChange={AddCust} />
                                             </td>
@@ -160,6 +189,29 @@ const AddCustomer = (props) => {
                                 </table>
                             </div>
                         </div>
+                        <p className="btn btn-primary position-relative mt-3" data-bs-toggle="collapse" href="#stage4" role="button" aria-expanded="false">
+                            Add Communication Details
+                        </p>
+                        <div className="collapse" id="stage4">
+                            <div className="card card-body">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <select name="communicatonType">
+                                                    <option>Select</option>
+                                                    <option>Email</option>
+                                                    <option>Mobile Number</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="CommunicationTypeData" placeholder="Enter Here" />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                         <div className="position-relative mt-3">
 
                             <button className="btn btn-primary" type="submit">Save</button>
@@ -172,3 +224,4 @@ const AddCustomer = (props) => {
 }
 
 export default AddCustomer
+

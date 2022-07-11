@@ -1,7 +1,8 @@
 import React from 'react'
 
-const EnterpriseHeader = ({enterpriseName,enterpriseAddress}) => {
-    //const {enterpriseName,enterpriseAddress}=entState;
+
+const EnterpriseHeader = (props) => {
+    const {enterpriseName, enterpriseAddress}=props;
     console.log(enterpriseName)
     return (
         <>

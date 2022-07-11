@@ -1,11 +1,11 @@
 import { ProSidebar, Menu, MenuItem, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import  './CSS/Sidebar.css'
-const Sidebar=({children})=>{
+const Sidebar=()=>{
     return(
         <div className="mainSidebar">
         <div>
-      <ProSidebar className="proSidebar">
+        <ProSidebar className="proSidebar">
     
                 <Menu iconShape="square">
                     <MenuItem>Dashboard</MenuItem>
